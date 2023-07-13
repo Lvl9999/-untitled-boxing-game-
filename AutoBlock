@@ -1,0 +1,64 @@
+--[[ Made by ThroughTheFireAndFlames#9925 | :)
+
+        Untitled Boxing Game AutoBlock [Open Source]
+
+--]]--------------------------------------
+
+-- getgenv().Distance = 15
+-- getgenv().AutoClicker = false
+
+local Teleport = function(x, y, z)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(x, y, z);
+end
+
+local Press = function(v)
+	return game:GetService("VirtualInputManager"):SendKeyEvent(true, v, false, game);
+end
+
+local Unpress = function(v)
+	return game:GetService("VirtualInputManager"):SendKeyEvent(false, v, false, game);
+end
+
+repeat task.wait() until game:IsLoaded();
+game.StarterGui:SetCore("SendNotification", {Title="ThroughTheFireAndFlames",Text="Hi :)"});
+wait(1)
+game.StarterGui:SetCore("SendNotification", {Title="🥊untitled boxing game🥊",Text="AutoBlock Loaded"});
+
+workspace.Debris.ChildAdded:Connect(function(v)
+	if ((v.Name == "SoundPart") and ((v.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 1.5)) then
+		if ((v.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= getgenv().Distance) then
+			Teleport(0,0,3.5);
+			Press("F");
+			wait(4.5);
+			Unpress("F");
+		end
+	end
+end);
+task.spawn(function()
+	while getgenv().AutoClicker == true do
+		wait(0.35);
+		for i, v in pairs(game.Players:GetPlayers()) do
+			if ((v ~= game.Players.LocalPlayer) and (game.Players.LocalPlayer:DistanceFromCharacter(v.Character.HumanoidRootPart.Position) < 5)) then
+				mouse1click(); -- Virtual clicks wouldnt work : (
+			end
+		end
+	end
+end);
+task.spawn(function()
+	game:GetService("Workspace").States[game.Players.LocalPlayer.Name].CharacterData.Stamina.Changed:Connect(function()
+		if (game:GetService("Workspace").States[game.Players.LocalPlayer.Name].CharacterData.Stamina.Value < 1) then
+			Teleport(0,85,0);
+		end
+	end);
+end);
+task.spawn(function()
+	while true do
+		wait(0.001);
+		game:GetService("Workspace").States[game.Players.LocalPlayer.Name].CharacterData.Stunned.Value = false;
+	end
+end);
+task.spawn(function()
+    while true do wait(0.1)
+        game.Workspace.Gravity = 450;
+    end
+end);
